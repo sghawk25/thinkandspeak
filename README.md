@@ -12,7 +12,8 @@ Monterey, California.
 |---|---|
 | `index.html` | The entire site — markup, styles, and the page-turning script. This is the only file you edit to change pamphlet content. |
 | `assets/` | Logo, founder photo, Come to the Table mark, favicon, and the subsetted TSRound display font. |
-| `tools/make-pdf.mjs` | Generates a print-ready `pamphlet.pdf` from `index.html`. |
+| `pamphlet.pdf` | Print-ready 8-page US Letter PDF, served at `/pamphlet.pdf`. Attach this to outreach emails. |
+| `tools/make-pdf.mjs` | Regenerates `pamphlet.pdf` from `index.html`. |
 | `vercel.json` | Static hosting config — long cache headers on `assets/`. |
 
 There is no build step and no dependencies. Open `index.html` in a browser and
@@ -38,6 +39,10 @@ remove a page, renumber them by hand.
 After editing, regenerate the PDF used as the email attachment:
 
 ```
+# Windows, nothing to install — uses the Chrome you already have:
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --no-pdf-header-footer --print-to-pdf=pamphlet.pdf index.html
+
+# Or cross-platform:
 npm install playwright && npx playwright install chromium
 node tools/make-pdf.mjs
 ```
