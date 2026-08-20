@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Think&amp;Speak! — A Civil Discourse Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8ED;
+    --blue:#4F9DDE;
+    --blue-dark:#2E6DA4;
+    --coral:#FF7A59;
+    --yellow:#FFD166;
+    --navy:#2D3142;
+    --green:#6FCF97;
+    --white:#FFFFFF;
+    --shadow: 0 12px 30px rgba(45,49,66,0.15);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:linear-gradient(160deg,var(--cream) 0%,#FFEFDA 100%);
+    font-family:'Nunito',sans-serif;
+    color:var(--navy);
+    overflow:hidden;
+  }
+  .stage{
+    position:relative;
+    width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .book{
+    position:relative;
+    width:min(92vw, 760px);
+    height:min(88vh, 980px);
+    background:var(--white);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    border:6px solid var(--white);
+  }
+  .page{
+    position:absolute; inset:0;
+    opacity:0; visibility:hidden;
+    transform: translateX(40px);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+    padding:40px 44px;
+    display:flex; flex-direction:column;
+    overflow-y:auto;
+  }
+  .page.active{
+    opacity:1; visibility:visible;
+    transform: translateX(0);
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .page.leaving{
+    transform: translateX(-40px);
+  }
+  h1,h2,h3{ font-family:'Baloo 2', sans-serif; margin:0 0 12px 0; }
+  p{ line-height:1.55; margin:0 0 14px 0; font-size:16px;}
+  .bubble{
+    display:inline-block;
+    border-radius:999px;
+    padding:10px 22px;
+    font-weight:700;
+    font-family:'Baloo 2', sans-serif;
+  }
+  .bubble.blue{ background:var(--blue); color:var(--white); }
+  .bubble.coral{ background:var(--coral); color:var(--white); }
+  .bubble.yellow{ background:var(--yellow); color:var(--navy); }
+  .bubble.green{ background:var(--green); color:var(--white); }
+
+  /* Cover */
+  #page-cover{
+    background:radial-gradient(circle at 30% 20%, #6BB3EA 0%, var(--blue) 55%, var(--blue-dark) 100%);
+    color:var(--white);
+    align-items:center; justify-content:center; text-align:center;
+  }
+  #page-cover .logo{
+    font-size:44px; font-weight:800; font-family:'Baloo 2',sans-serif;
+    margin-bottom:6px;
+  }
+  #page-cover .headline{
+    font-size:20px; font-weight:700; max-width:420px; margin:8px auto 18px;
+  }
+  #page-cover .tagline-bubble{
+    background:var(--white); color:var(--blue-dark);
+    border-radius:24px; padding:16px 24px; font-size:15px; font-weight:700;
+    max-width:380px; margin:10px auto; box-shadow:0 8px 18px rgba(0,0,0,.15);
+  }
+  #page-cover .greeting{
+    margin-top:24px; font-size:18px; font-weight:800; font-family:'Baloo 2',sans-serif;
+    background:var(--yellow); color:var(--navy); padding:8px 20px; border-radius:999px;
+  }
+
+  /* Page 1 */
+  #page-1 .quote-bubble{
+    background:#EAF4FD; border-left:6px solid var(--blue);
+    padding:16px 20px; border-radius:14px; font-style:italic; font-weight:600;
+    margin-bottom:16px;
+  }
+  .placeholder-photo{
+    margin-top:auto;
+    background:repeating-linear-gradient(45deg,#F2E9DA,#F2E9DA 10px,#EBDFCB 10px,#EBDFCB 20px);
+    border:3px dashed var(--coral);
+    border-radius:18px;
+    height:180px;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:6px;
+    color:#8a6a4a; font-weight:700; text-align:center; padding:12px;
+  }
+  .placeholder-photo svg{ width:38px; height:38px; opacity:.6; }
+  .placeholder-photo small{ font-weight:600; opacity:.75; }
+
+  /* Page 2 - fundamentals */
+  .fund-list{ display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+  .fund-item{
+    display:flex; gap:12px; align-items:flex-start;
+    background:#FBF6EC; border-radius:16px; padding:12px 16px;
+  }
+  .fund-num{
+    flex:0 0 auto; width:34px; height:34px; border-radius:50%;
+    background:var(--coral); color:var(--white); font-family:'Baloo 2',sans-serif;
+    display:flex; align-items:center; justify-content:center; font-weight:700;
+  }
+  .fund-item h3{ font-size:16px; margin-bottom:4px; }
+  .fund-item p{ margin:0; font-size:14.5px; }
+
+  /* Page 3 */
+  .points-list{ counter-reset:pt; margin:8px 0 18px 0; padding:0; list-style:none; }
+  .points-list li{
+    counter-increment:pt;
+    display:flex; align-items:center; gap:12px;
+    background:#EFF8F1; border-radius:14px; padding:12px 16px; margin-bottom:10px;
+    font-weight:700; font-family:'Baloo 2',sans-serif; font-size:16px;
+  }
+  .points-list li::before{
+    content:counter(pt);
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%;
+    background:var(--green); color:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2',sans-serif;
+  }
+
+  /* Page 4 */
+  .cttt-bubble{
+    background:linear-gradient(135deg,var(--yellow),#FFC24B);
+    border-radius:20px; padding:18px 20px; margin-bottom:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+  }
+  .cttt-bubble h3{ font-size:17px; margin-bottom:6px; }
+  .cta-block{
+    margin-top:auto; text-align:center;
+    background:var(--blue); color:var(--white);
+    border-radius:20px; padding:22px 18px;
+  }
+  .cta-block h2{ color:var(--white); font-size:22px; }
+  .cta-block a{ color:var(--white); font-weight:800; font-size:17px; text-decoration:underline; }
+
+  /* Back cover */
+  #page-back{
+    background:var(--navy); color:var(--white);
+    align-items:center; justify-content:center; text-align:center;
+  }
+  #page-back h2{ color:var(--white); font-size:24px; }
+  #page-back .sub{ max-width:360px; margin:6px auto 20px; font-weight:600; opacity:.92; }
+  #page-back .loc{ opacity:.7; font-weight:700; letter-spacing:.5px; margin-bottom:22px; }
+  .social-row{ display:flex; gap:14px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+  .social-pill{
+    background:rgba(255,255,255,.12); border:1.5px dashed rgba(255,255,255,.5);
+    border-radius:999px; padding:9px 18px; font-weight:700; font-size:14px;
+  }
+
+  .nav-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:46px; height:46px; border-radius:50%;
+    background:var(--white); box-shadow:var(--shadow);
+    border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    color:var(--blue-dark); font-size:20px; z-index:5;
+  }
+  .nav-arrow:hover{ background:var(--yellow); }
+  .nav-arrow.prev{ left:-58px; }
+  .nav-arrow.next{ right:-58px; }
+  @media (max-width:820px){
+    .nav-arrow.prev{ left:6px; }
+    .nav-arrow.next{ right:6px; }
+    .nav-arrow{ background:rgba(255,255,255,.85); }
+  }
+
+  .dots{
+    position:absolute; bottom:14px; left:0; right:0;
+    display:flex; justify-content:center; gap:7px; z-index:5;
+  }
+  .dot{ width:8px; height:8px; border-radius:50%; background:rgba(45,49,66,.25); transition:background .2s; }
+  .dot.active{ background:var(--coral); }
+  .hint{
+    position:absolute; top:16px; left:50%; transform:translateX(-50%);
+    font-size:12px; color:var(--navy); opacity:.55; font-weight:700;
+    background:rgba(255,255,255,.7); padding:5px 12px; border-radius:999px;
+    pointer-events:none; z-index:6;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="book" id="book">
+
+    <!-- Cover -->
+    <section class="page active" id="page-cover">
+      <div class="logo">Think&amp;Speak!</div>
+      <div class="headline">A Civil Discourse Program for Elementary Students</div>
+      <div class="tagline-bubble">A Free Visit for Your Classroom</div>
+      <p style="max-width:340px;margin:10px auto 0;font-weight:600;">Confident handshakes, clear voices, and kind words — brought right to your classroom.</p>
+      <div class="greeting">Hello, Teachers!</div>
+    </section>
+
+    <!-- Page 1 -->
+    <section class="page" id="page-1">
+      <h1>Big Skills Start Small</h1>
+      <div class="quote-bubble">"Civil discourse means talking and listening in a kind and respectful way, even when we don't agree."</div>
+      <p>Think&amp;Speak! is a free, interactive classroom workshop that helps young students build the confidence and communication skills they'll use for a lifetime — through hands-on activities, games, and guided practice.</p>
+      <div class="placeholder-photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-4 4-3-3-4 4"/></svg>
+        <span>Think&amp;Speak! photo</span>
+        <small>placeholder — swap in your image</small>
+      </div>
+    </section>
+
+    <!-- Page 2 (unchanged) -->
+    <section class="page" id="page-2">
+      <h1>The Four Fundamentals</h1>
+      <div class="fund-list">
+        <div class="fund-item">
+          <div class="fund-num">1</div>
+          <div><h3>The Confident Handshake</h3><p>A firm grip, a smile, and eye contact to start every interaction off right.</p></div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-num">2</div>
+          <div><h3>Eye Contact &amp; a Clear Voice</h3><p>Speaking up and looking others in the eye builds trust and confidence.</p></div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-num">3</div>
+          <div><h3>Posture &amp; Body Language</h3><p>Standing tall and staying open shows others we're listening.</p></div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-num">4</div>
+          <div><h3>Respectful Disagreement</h3><p>"I hear you, and I see it differently because..." — kind words for hard conversations.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page 3 -->
+    <section class="page" id="page-3">
+      <h1>We Come to You: Activities, Games, and a Craft</h1>
+      <ol class="points-list">
+        <li>Warm Up &amp; Introductions</li>
+        <li>Skill Development</li>
+        <li>Group/Partner Practice</li>
+        <li>A Take-Home Craft</li>
+      </ol>
+      <div class="placeholder-photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-4 4-3-3-4 4"/></svg>
+        <span>Craft photo</span>
+        <small>placeholder — swap in a photo of the take-home craft</small>
+      </div>
+    </section>
+
+    <!-- Page 4 -->
+    <section class="page" id="page-4">
+      <div class="cttt-bubble">
+        <h3>A Come to the Table Project</h3>
+        <p style="margin:0;font-size:14.5px;">Think&amp;Speak! is brought to you by the Come to the Table Project, dedicated to building bridges through everyday conversation.</p>
+      </div>
+      <div class="cta-block">
+        <h2>Bring Zamina to Your Class</h2>
+        <p style="color:#fff;opacity:.9;">Free for elementary classrooms.</p>
+        <a href="mailto:thinkandspeakmonterey@gmail.com">thinkandspeakmonterey@gmail.com</a>
+      </div>
+    </section>
+
+    <!-- Back cover -->
+    <section class="page" id="page-back">
+      <h2>Eliminating "Us vs. Them"</h2>
+      <div class="sub">Promoting confidence, collaborative dialogue, and fun.</div>
+      <div class="loc">MONTEREY, CA</div>
+      <div class="social-row">
+        <div class="social-pill">@yourhandle</div>
+        <div class="social-pill">yourwebsite.com</div>
+      </div>
+    </section>
+
+    <button class="nav-arrow prev" id="prevBtn" aria-label="Previous page">&#10094;</button>
+    <button class="nav-arrow next" id="nextBtn" aria-label="Next page">&#10095;</button>
+    <div class="dots" id="dots"></div>
+    <div class="hint">Use the arrows, keyboard, swipe, or tap a page to turn</div>
+  </div>
+</div>
+
+<script>
+  const pages = Array.from(document.querySelectorAll('.page'));
+  const dotsWrap = document.getElementById('dots');
+  let current = 0;
+
+  pages.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function goTo(index){
+    if(index < 0 || index >= pages.length || index === current) return;
+    pages[current].classList.remove('active');
+    pages[current].classList.add('leaving');
+    setTimeout(()=> pages[current].classList.remove('leaving'), 460);
+    current = index;
+    pages[current].classList.add('active');
+    dots.forEach((d,i)=> d.classList.toggle('active', i===current));
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', ()=> goTo(current+1));
+  document.getElementById('prevBtn').addEventListener('click', ()=> goTo(current-1));
+  dots.forEach((d,i)=> d.addEventListener('click', ()=> goTo(i)));
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight') goTo(current+1);
+    if(e.key === 'ArrowLeft') goTo(current-1);
+  });
+
+  // swipe
+  let touchStartX = null;
+  const book = document.getElementById('book');
+  book.addEventListener('touchstart', e=> touchStartX = e.touches[0].clientX);
+  book.addEventListener('touchend', e=>{
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx > 50) goTo(current-1);
+    else if(dx < -50) goTo(current+1);
+    touchStartX = null;
+  });
+
+  // tap edges to turn (avoid interactive elements)
+  book.addEventListener('click', (e)=>{
+    if(e.target.closest('button, a, .dots')) return;
+    const rect = book.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if(x > rect.width * 0.82) goTo(current+1);
+    else if(x < rect.width * 0.18) goTo(current-1);
+  });
+</script>
+</body>
+</html>
