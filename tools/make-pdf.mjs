@@ -1,4 +1,4 @@
-﻿// Regenerates pamphlet.pdf from index.html.
+// Regenerates pamphlet.pdf from index.html.
 //   npm install playwright && npx playwright install chromium
 //   node tools/make-pdf.mjs
 import { chromium } from 'playwright';

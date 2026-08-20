@@ -1,4 +1,4 @@
-﻿# Think&Speak! — teacher pamphlet
+# Think&Speak! — teacher pamphlet
 
 The interactive flipbook pamphlet for **Think&Speak!**, a free civil discourse
 workshop that Come to the Table Project brings into elementary classrooms in
