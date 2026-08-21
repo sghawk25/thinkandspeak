@@ -10,8 +10,8 @@
 @font-face{font-family:'TSRound';src:url('assets/tsround.woff2') format('woff2');font-weight:400 800;}
 
   :root{
-    --navy:#1e4e79; --navy-deep:#16395a; --flame:#d94f2b;
-    --flame-soft:#f8e3db; --sky:#e8f0f7; --paper:#fffdf9;
+    --navy:#1e4e79; --navy-deep:#16395a; --flame:#d92b2b;
+    --flame-soft:#fbe0df; --sky:#e8f0f7; --paper:#fffdf9;
     --ink:#243b53; --backdrop:#dce8f2; --shadow:rgba(22,57,90,.28);
   }
   @media (prefers-color-scheme: dark){ :root{ --backdrop:#12212f; --shadow:rgba(0,0,0,.5);} }
@@ -64,7 +64,7 @@
   .logo{ display:block; }
   .cover{ align-items:center; justify-content:center; text-align:center; gap:18px; padding:40px 32px;
     background:
-      radial-gradient(circle at 86% 12%, var(--flame-soft) 0 74px, transparent 75px),
+      radial-gradient(circle at 86% 12%, var(--sky) 0 74px, transparent 75px),
       radial-gradient(circle at 10% 90%, var(--sky) 0 104px, transparent 105px),
       var(--paper); }
   .cover-sub{ color:var(--flame); font-style:italic; font-weight:600; font-size:16.5px; text-wrap:balance; }
@@ -79,11 +79,10 @@
     padding:14px 16px; margin:16px 0; font-size:14px; line-height:1.5; color:var(--navy-deep); }
   .quotecard b{ color:var(--flame); }
   .quotecard .attrib{ font-size:11.5px; opacity:.72; display:block; margin-top:5px; }
-  .photo-placeholder{ margin-top:14px; border:2px dashed var(--flame); border-radius:12px; background:var(--sky);
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:18px;
-    text-align:center; color:var(--navy); font-size:12px; font-weight:700; min-height:110px; }
-  .photo-placeholder svg{ width:32px; height:32px; opacity:.55; }
-  .photo-placeholder small{ font-weight:600; opacity:.7; font-size:10.5px; }
+  .craft-photo{ margin-top:14px; width:100%; height:150px; object-fit:cover; object-position:50% 58%;
+    border-radius:12px; border:3px solid var(--flame); box-shadow:0 4px 12px var(--shadow); display:block; }
+  .room-photo{ margin-top:14px; width:100%; height:170px; object-fit:cover; object-position:35% 42%;
+    border-radius:12px; border:3px solid var(--navy); box-shadow:0 4px 12px var(--shadow); display:block; }
   .skills{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
   .skill{ background:var(--sky); border-radius:12px; padding:14px 13px 12px; display:flex; flex-direction:column; gap:6px; }
   .skill:nth-child(even){ background:var(--flame-soft); }
@@ -115,7 +114,7 @@
   .cta-box .label{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; opacity:.75; }
   .cta-box .value{ font-size:15.5px; font-weight:700; word-break:break-all;
     font-family:'TSRound',"Arial Rounded MT Bold","Avenir Next",Verdana,sans-serif; }
-  .cta-box .value.orange{ color:#ffb59e; }
+  .cta-box .value.orange{ color:#ffaba1; }
   .freeline{ margin-top:14px; text-align:center; color:var(--flame); font-weight:800; font-size:14px; letter-spacing:.02em; }
   .closing{ align-items:center; justify-content:center; text-align:center; gap:16px; padding:40px 32px;
     background:radial-gradient(circle at 15% 12%, var(--sky) 0 90px, transparent 91px), var(--paper); }
@@ -124,9 +123,9 @@
   .closing .sub{ font-size:12px; color:var(--ink); opacity:.8; max-width:240px; line-height:1.5; }
   .backcover{ align-items:center; justify-content:center; text-align:center; gap:18px; background:var(--navy); color:#fff; padding:42px 34px; }
   .backcover .logo{ width:170px; background:#fffdf9; border-radius:14px; padding:13px; }
-  .backcover .motto{ font-size:19px; line-height:1.45; font-weight:600; font-style:italic; max-width:270px; color:#fdece6; text-wrap:balance; }
+  .backcover .motto{ font-size:19px; line-height:1.45; font-weight:600; font-style:italic; max-width:270px; color:#fce3e1; text-wrap:balance; }
   .backcover .fine{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.7; }
-  .backcover .promo{ font-size:14px; line-height:1.4; font-weight:600; font-style:italic; max-width:260px; color:#fdece6; opacity:.92; }
+  .backcover .promo{ font-size:14px; line-height:1.4; font-weight:600; font-style:italic; max-width:260px; color:#fce3e1; opacity:.92; }
   .backcover .social-row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:4px; }
   .backcover .social-pill{ background:rgba(255,255,255,.14); border:1.3px solid rgba(255,255,255,.5); border-radius:999px; padding:7px 14px; font-size:11px; font-weight:700; letter-spacing:.02em; }
   .controls{ display:flex; align-items:center; gap:16px; }
@@ -188,9 +187,7 @@
     <h2>Big skills start small.</h2>
     <p>Think&amp;Speak! is an interactive workshop program for elementary students. They build skills to listen to their peers, to speak with grace and kindness, and to speak with confidence, through fun, age-appropriate games and activities.</p>
     <div class="quotecard">"Civil discourse means talking and listening in a kind and respectful way, <b>even when we don't agree.</b>"<span class="attrib">How we explain it to students.</span></div>
-    <div style="margin-top:14px;display:flex;align-items:center;justify-content:center;background:var(--sky);border-radius:12px;padding:20px;min-height:110px;">
-      <img src="assets/logo.png" alt="Think and Speak! logo" style="width:140px;height:auto;">
-    </div>
+    <img class="room-photo" src="assets/room.jpg" alt="Students and a facilitator around a table at a Think&amp;Speak! workshop">
     <div class="pageno"><span>Think&amp;Speak!</span><span>1</span></div>
   </div></div>
     </div>
@@ -205,7 +202,7 @@
         <p>A firm grip, eye contact, and "nice to meet you." A confident first impression sets the tone.</p>
       </div>
       <div class="skill">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#d94f2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#d92b2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></svg>
         <h3>Eye Contact &amp; a Clear Voice</h3>
         <p>Eyes show you are listening. A clear, bold voice shows confidence.</p>
       </div>
@@ -215,7 +212,7 @@
         <p>Sitting and standing tall shows confidence and respect for the speaker.</p>
       </div>
       <div class="skill">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#d94f2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9h10M7 12h6"/><path d="M4 4h16v12H9l-5 4z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#d92b2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9h10M7 12h6"/><path d="M4 4h16v12H9l-5 4z"/></svg>
         <h3>Respectful Disagreement</h3>
         <p>"I understand your idea, but I see it differently." We can disagree without being unkind.</p>
       </div>
@@ -231,7 +228,7 @@
       <li><span class="dot">3</span><span><b>Group/Partner Practice.</b></span></li>
       <li><span class="dot">4</span><span><b>A Take-Home Craft.</b></span></li>
     </ul>
-    <div class="photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-4 4-3-3-4 4"/></svg>Craft photo<small>placeholder — swap in a photo of the take-home craft</small></div>
+    <img class="craft-photo" src="assets/craft.jpg" alt="Students at a Think&amp;Speak! workshop working on their take-home craft">
     <div class="pageno"><span>Think&amp;Speak!</span><span>3</span></div>
   </div></div>
     </div>
